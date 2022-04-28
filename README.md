@@ -4,4 +4,4 @@
 ```python
 python3 hla_service_automation_wrapper.py -h
 ```
-- Place xlxs and csv file inside the input directory 
+- Place xlxs and csv file inside the input directory and wait for the mail
