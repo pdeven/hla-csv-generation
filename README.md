@@ -10,6 +10,6 @@ python3 hla_service_automation_wrapper.py -h
 graph TD;
     wrapper-->main;
     main-->serology;
-    main-->mail generation;
+    main-->mail_generation;
     main-->csv;
 ```
