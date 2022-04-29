@@ -1,7 +1,5 @@
-#basesolve.com
 import pandas as pd
 import os,json,argparse,re
-
 class service_automation():
     def __init__(self, excel, csv, input_path, output_path):
         self.excel = excel
@@ -27,12 +25,9 @@ class service_automation():
         return index_dict
 
     def process(self):
-        
         excel_file = os.path.join(self.input_path+self.excel)
         csv_file = os.path.join(self.input_path+self.csv)
-
         excel_df=pd.read_excel(excel_file)
-
         excel_df.to_csv(r'temp.csv')
         flagg = False
         excel_csv_file = open('temp.csv','r').readlines()

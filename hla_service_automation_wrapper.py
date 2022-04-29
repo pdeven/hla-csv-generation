@@ -47,12 +47,15 @@ while True:
         wrapper_file = open(wrapper_log_file_path, 'a')
         now_time = datetime.now()
         wrapper_file.write('At {}'.format(now_time)+" two files provided "+excel+" and "+csv+"\n")
+        ps=str(now_time).split()[0]
+        os.rename(os.path.join(argv1,csv),os.path.join(argv1,ps+"_"+csv))
+        os.rename(os.path.join(argv1,excel),os.path.join(argv1,ps+"_"+excel))
         try:
-            shutil.move(os.path.join(argv1,excel),argv3)
-            shutil.move(os.path.join(argv1,csv),argv3)
+            shutil.move(os.path.join(argv1,ps+"_"+excel),argv3)
+            shutil.move(os.path.join(argv1,ps+"_"+csv),argv3)
         except shutil.Error:
-            os.remove(os.path.join(argv1,csv))
-            os.remove(os.path.join(argv1,excel))
+            os.remove(os.path.join(argv1,ps+"_"+csv))
+            os.remove(os.path.join(argv1,ps+"_"+excel))
         
         generate_email(s_l)
 
