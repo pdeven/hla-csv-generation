@@ -141,6 +141,7 @@ class serology:
             if pattern[0]=='C': obtained_serology="Cw"+str(obtained_serology)
             elif pattern[0]=='D': obtained_serology=pattern[0:2]+str(obtained_serology)
             else: obtained_serology=pattern[0]+str(obtained_serology)
+        if obtained_serology=="NULL": obtained_serology="-"
         return obtained_serology
     
     def extract(self, allele_data, serotype_dict):
