@@ -30,7 +30,7 @@ Files not generated for this samples {s_l[-1]}
     log_email(from_email, to_email, password, subject, body)
 
 while True:
-    time.sleep(15)
+    time.sleep(30)
     excel=""
     csv=""
     try:
