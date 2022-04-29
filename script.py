@@ -1,3 +1,4 @@
+_DEBUG = False
 import pandas as pd
 import os,json,argparse,re
 class service_automation():
