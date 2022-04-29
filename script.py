@@ -1,4 +1,3 @@
-_DEBUG = False
 import pandas as pd
 import os,json,argparse,re
 class service_automation():
@@ -93,7 +92,7 @@ class service_automation():
             file_name = os.path.join(self.output_path, sample_id+"_"+sample_name.upper())
             try:
                 out = open(file_name+"_out.csv",'w')
-                out.write(file_name+"\n")
+                out.write(sample_id+"_"+sample_name.upper()+"\n")
                 out.write(sample_values["A/1"]+","+sample_values["A/1_serotype"]+",A1\n")
                 out.write(sample_values["A/2"]+","+sample_values["A/2_serotype"]+",A2\n")
                 out.write(sample_values["B/1"]+","+sample_values["B/1_serotype"]+",B1\n")
