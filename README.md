@@ -8,8 +8,8 @@ python3 hla_service_automation_wrapper.py -h
 
 ```mermaid
 graph TD;
-    wrapper-->main;
-    main-->serology;
-    main-->mail_generation;
-    main-->csv;
+    A[Wrapper]-->B[Main];
+    B-->C[Serology];
+    B-->D[E-Mail generation];
+    B-->E[Sample wise csv file with typing result and Serlogy];
 ```
