@@ -24,6 +24,37 @@ class service_automation():
             i+=1
         return index_dict
 
+    def make_csv(self, json_dict):
+        sample_pass_list=[]
+        sample_fail_list=[]
+        for sample_id, sample_values in json_dict.items():
+            sample_name=""
+            try:
+                sample_name=sample_values["patient_name_age"].split()[1]
+            except IndexError:
+                pass
+            file_name = os.path.join(self.output_path, sample_id+"_"+sample_name.upper())
+            try:
+                out = open(file_name+".out",'w')
+                out.write(sample_id+"_"+sample_name.upper()+"\n")
+                out.write(sample_values["A/1"]+","+sample_values["A/1_serotype"]+",A1\n")
+                out.write(sample_values["A/2"]+","+sample_values["A/2_serotype"]+",A2\n")
+                out.write(sample_values["B/1"]+","+sample_values["B/1_serotype"]+",B1\n")
+                out.write(sample_values["B/2"]+","+sample_values["B/2_serotype"]+",B2\n")
+                out.write(sample_values["C/1"]+","+sample_values["C/1_serotype"]+",C1\n")
+                out.write(sample_values["C/2"]+","+sample_values["C/2_serotype"]+",C2\n")
+                out.write(sample_values["DRB1/1"]+","+sample_values["DRB1/1_serotype"]+",DR1\n")
+                out.write(sample_values["DRB1/2"]+","+sample_values["DRB1/2_serotype"]+",DR2\n")
+                out.write(sample_values["DQB1/1"]+","+sample_values["DQB1/1_serotype"]+",DQ1\n")
+                out.write(sample_values["DQB1/2"]+","+sample_values["DQB1/2_serotype"]+",DQ2\n")
+                out.write(sample_values["DPB1/1"]+","+sample_values["DPB1/1_serotype"]+",DP1\n")
+                out.write(sample_values["DPB1/2"]+","+sample_values["DPB1/2_serotype"]+",DP2")
+                out.close()
+                sample_pass_list.append(sample_id)
+            except Exception:
+                sample_fail_list.append(sample_id)
+        return sample_pass_list, sample_fail_list
+
     def process(self):
         excel_file = os.path.join(self.input_path+self.excel)
         csv_file = os.path.join(self.input_path+self.csv)
@@ -44,28 +75,61 @@ class service_automation():
                 temp_dict['sample_id']=row[index_dict['a_mrn']]
                 temp_dict['patient_MRN']=row[index_dict['p_mrn']]
                 excel_dict[row[index_dict['p_mrn']]]=temp_dict
-        
-        csv_df=pd.read_csv(csv_file)
+        csv_df=pd.read_csv(csv_file,index_col=False)
         csv_dict={}
         for index, row in csv_df.iterrows():
+            print(row['MRNO'])
             temp_dict={}
             temp_dict['A/1']=row['A/1']
             temp_dict['A/2']=row['A/2']
             if temp_dict['A/2']=='-': temp_dict['A/2']=temp_dict['A/1']
+            if temp_dict['A/2'] < temp_dict['A/1']:
+                tt = temp_dict['A/2']
+                temp_dict['A/2'] = temp_dict['A/1']
+                temp_dict['A/1'] = tt
+            print(temp_dict['A/1'], temp_dict['A/2'])
             temp_dict['B/1']=row['B/1']
             temp_dict['B/2']=row['B/2']
             if temp_dict['B/2']=='-': temp_dict['B/2']=temp_dict['B/1']
+            if temp_dict['B/2'] < temp_dict['B/1']:
+                tt = temp_dict['B/2']
+                temp_dict['B/2'] = temp_dict['B/1']
+                temp_dict['B/1'] = tt
+            print(temp_dict['B/1'], temp_dict['B/2'])
             temp_dict['C/1']=row['C/1']
             temp_dict['C/2']=row['C/2']
             if temp_dict['C/2']=='-': temp_dict['C/2']=temp_dict['C/1']
+            if temp_dict['C/2'] < temp_dict['C/1']:
+                tt = temp_dict['C/2']
+                temp_dict['C/2'] = temp_dict['C/1']
+                temp_dict['C/1'] = tt
+            print(temp_dict['C/1'], temp_dict['C/2'])
             temp_dict['DRB1/1']=row['DRB1/1']
             temp_dict['DRB1/2']=row['DRB1/2']
             if temp_dict['DRB1/2']=='-': temp_dict['DRB1/2']=temp_dict['DRB1/1']
+            if temp_dict['DRB1/2'] < temp_dict['DRB1/1']:
+                tt = temp_dict['DRB1/2']
+                temp_dict['DRB1/2'] = temp_dict['DRB1/1']
+                temp_dict['DRB1/1'] = tt
+            print(temp_dict['DRB1/1'], temp_dict['DRB1/2'])
+            temp_dict['DPB1/1']=row['DPB1/1']
+            temp_dict['DPB1/2']=row['DPB1/2']
+            if temp_dict['DPB1/2']=='-': temp_dict['DPB1/2']=temp_dict['DPB1/1']
+            if temp_dict['DPB1/2'] < temp_dict['DPB1/1']:
+                tt = temp_dict['DPB1/2']
+                temp_dict['DPB1/2'] = temp_dict['DPB1/1']
+                temp_dict['DPB1/1'] = tt
+            print(temp_dict['DPB1/1'], temp_dict['DPB1/2'])
             temp_dict['DQB1/1']=row['DQB1/1']
             temp_dict['DQB1/2']=row['DQB1/2']
             if temp_dict['DQB1/2']=='-': temp_dict['DQB1/2']=temp_dict['DQB1/1']
-            csv_dict[str(row['MRNO'])]=temp_dict
-
+            if temp_dict['DQB1/2'] < temp_dict['DQB1/1']:
+                tt = temp_dict['DQB1/2']
+                temp_dict['DQB1/2'] = temp_dict['DQB1/1']
+                temp_dict['DQB1/1'] = tt
+            print(temp_dict['DQB1/1'], temp_dict['DQB1/2'])
+            mr_number = row['MRNO']
+            csv_dict[str(mr_number)]=temp_dict
         merged_dict={}
         for key_excel, value_excel in excel_dict.items():
             new_dict=value_excel
@@ -79,35 +143,7 @@ class service_automation():
         with_serotype = serology().stream(merged_dict)
         return self.make_csv(with_serotype)
 
-    def make_csv(self, json_dict):
-        sample_pass_list=[]
-        sample_fail_list=[]
-    
-        for sample_id, sample_values in json_dict.items():
-            sample_name=""
-            try:
-                sample_name=sample_values["patient_name_age"].split()[1]
-            except IndexError:
-                pass
-            file_name = os.path.join(self.output_path, sample_id+"_"+sample_name.upper())
-            try:
-                out = open(file_name+"_out.csv",'w')
-                out.write(sample_id+"_"+sample_name.upper()+"\n")
-                out.write(sample_values["A/1"]+","+sample_values["A/1_serotype"]+",A1\n")
-                out.write(sample_values["A/2"]+","+sample_values["A/2_serotype"]+",A2\n")
-                out.write(sample_values["B/1"]+","+sample_values["B/1_serotype"]+",B1\n")
-                out.write(sample_values["B/2"]+","+sample_values["B/2_serotype"]+",B2\n")
-                out.write(sample_values["C/1"]+","+sample_values["C/1_serotype"]+",C1\n")
-                out.write(sample_values["C/2"]+","+sample_values["C/2_serotype"]+",C2\n")
-                out.write(sample_values["DRB1/1"]+","+sample_values["DRB1/1_serotype"]+",DR1\n")
-                out.write(sample_values["DRB1/2"]+","+sample_values["DRB1/2_serotype"]+",DR2\n")
-                out.write(sample_values["DQB1/1"]+","+sample_values["DQB1/1_serotype"]+",DQ1\n")
-                out.write(sample_values["DQB1/2"]+","+sample_values["DQB1/2_serotype"]+",DQ2")
-                out.close()
-                sample_pass_list.append(sample_id)
-            except Exception:
-                sample_fail_list.append(sample_id)
-        return sample_pass_list, sample_fail_list
+
 
 class serology:
     def __init__(self) -> None:
@@ -129,7 +165,9 @@ class serology:
                           "DRB1/1":"DRB1*;",
                           "DRB1/2":"DRB1*;",
                           "DQB1/1":"DQB1*;",
-                          "DQB1/2":"DQB1*;"
+                          "DQB1/2":"DQB1*;",
+                          "DPB1/1":"DPB1*",
+                          "DPB1/2":"DPB1*"
                           }
         value=value.replace('G','')
         pattern = map_dict_locus[locus]+value
@@ -151,7 +189,11 @@ class serology:
             for record_keys, record_values in sample_records.items():
                 if record_keys=="allele_record":
                     for locus, locus_value in record_values.items():
-                        serotype_value = self.transfer(locus , locus_value, serotype_dict)
+                        if isinstance(locus_value,float):
+                            serotype_value="Null"           
+                        else:
+                            serotype_value = self.transfer(locus , locus_value, serotype_dict)
+
                         serotype_key = locus+"_serotype"
                         sample_dict[locus]=locus_value
                         sample_dict[serotype_key]=serotype_value
